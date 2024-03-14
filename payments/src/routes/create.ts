@@ -47,6 +47,12 @@ route.post(
       throw new BadRequestError("Order already paid");
     }
 
+    const regex = /^[a-zA-Z0-9]{12}$/;
+
+    if (!regex.test(token)) {
+      throw new BadRequestError("Provide valid Razorpay Id");
+    }
+
     const payment = Payment.build({
       user: req.currentUser!.id,
       orderId,

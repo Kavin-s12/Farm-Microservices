@@ -7,7 +7,8 @@
     "start": "ts-node-dev --poll src/index.ts",
     "data:import": "ts-node-dev src/seeder",
     "data:destroy": "ts-node-dev src/seeder -d",
-    "test": "jest --watchAll --no-cache"
+    "test": "jest --watchAll --no-cache",
+    "test:ci": "jest"
   },
   "jest": {
     "preset": "ts-jest",

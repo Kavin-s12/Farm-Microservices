@@ -5,52 +5,38 @@ import TimerComponent from "./TimerComponent";
 import Loader from "./Loader";
 import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const PayButton = ({ totalPrice, id, expiresAt }) => {
   const [expire, setExpired] = useState(false);
   const [sdkready, setSdkReady] = useState(false);
   const dispatch = useDispatch();
 
-  const successPaymentHandler = (paymentResult) => {
-    dispatch(updatePaidStatus(id, paymentResult));
+  const successPaymentHandler = (paymentId) => {
+    console.log("called payement handler", paymentId);
+    dispatch(updatePaidStatus(id, paymentId));
   };
 
   const handlePayment = async () => {
     // Initialize and open the Razorpay checkout form
     try {
-      // const data = {
-      //   amount: order.totalPrice,
-      //   orderId: order.id,
-      // };
-      // const config = {
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // };
+      const body = {
+        amount: totalPrice,
+        orderId: id,
+      };
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-      // const { data: orderId } = await axios.post(
-      //   "/api/payments/createId",
-      //   JSON.stringify(data),
-      //   config
-      // );
+      const { data } = await axios.post(
+        "/api/payments/createId",
+        JSON.stringify(body),
+        config
+      );
 
-      // const response = await axios.post(
-      //   "https://api.razorpay.com/v1/orders",
-      //   {
-      //     amount: order.totalPrice * 100, // Amount should be in smallest currency unit (e.g., paise for INR)
-      //     currency: "INR",
-      //     receipt: userInfo.email,
-      //   },
-      //   {
-      //     auth: {
-      //       username: process.env.RAZORPAY_KEY_ID, // Ensure these environment variables are set
-      //       password: process.env.RAZORPAY_SECRET,
-      //     },
-      //     config,
-      //   }
-      // );
-      // console.log(response);
-      console.log(process.env);
+      console.log(data);
       const options = {
         key: "rzp_test_4lnT7r2n2nIbba",
         amount: totalPrice * 100,
@@ -58,7 +44,7 @@ const PayButton = ({ totalPrice, id, expiresAt }) => {
         name: "Farm Products",
         description: "Fresh Farm to Home",
         image: "favicon-16x16.png",
-        //order_id: response.data.orderId,
+        order_id: data.orderId,
         handler: function (response) {
           if (response.razorpay_payment_id) {
             // Payment successful

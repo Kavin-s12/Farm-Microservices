@@ -96,7 +96,6 @@ export const updatePaidStatus = (id, tokenId) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 

@@ -3,12 +3,11 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import jwt from "jsonwebtoken";
 
 jest.mock("../nats-wrapper");
+jest.mock("../razorpay");
 
 declare global {
   var signin: (id?: string) => string[];
 }
-
-process.env.STRIPE_KEY = "justTesting";
 
 let mongo: any;
 beforeAll(async () => {

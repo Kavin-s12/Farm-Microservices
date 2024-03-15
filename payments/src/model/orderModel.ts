@@ -10,11 +10,12 @@ interface OrderAttrs {
   status: OrderStatus;
 }
 
-interface OrderDoc extends mongoose.Document {
+export interface OrderDoc extends mongoose.Document {
   user: string;
   totalPrice: number;
   version: number;
   status: OrderStatus;
+  razorPayOrderId: string;
 }
 
 interface OrderModel extends mongoose.Model<OrderDoc> {
@@ -35,6 +36,9 @@ const orderSchema = new mongoose.Schema<OrderDoc>(
     status: {
       type: String,
       required: true,
+    },
+    razorPayOrderId: {
+      type: String,
     },
   },
   {

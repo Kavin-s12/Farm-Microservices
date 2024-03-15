@@ -1,9 +1,10 @@
-import { requireAuth, validateRequest } from "@farmmicro/common";
+import { NotFoundError, requireAuth, validateRequest } from "@farmmicro/common";
 import axios from "axios";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import Razorpay from "razorpay";
 import { razorpay } from "../razorpay";
+import { Order } from "../model/orderModel";
 
 const router = express.Router();
 
@@ -28,6 +29,12 @@ router.post(
       // Extract amount and orderId from request body
       const { amount, orderId } = req.body;
 
+      const order = await Order.findById(orderId);
+
+      if (!order) {
+        throw new NotFoundError("Order not found");
+      }
+
       const response = await razorpay.orders.create({
         amount: amount * 100,
         currency: "INR",
@@ -37,6 +44,9 @@ router.post(
           userId: req.currentUser!.id,
         },
       });
+
+      order.razorPayOrderId = response.id;
+      await order.save();
 
       // Send the order ID back to the client
       res.status(201).send({ orderId: response.id });

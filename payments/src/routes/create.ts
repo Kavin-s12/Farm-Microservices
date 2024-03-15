@@ -12,6 +12,7 @@ import { body } from "express-validator";
 import { Payment } from "../model/paymentModel";
 import { PaymentCreatedPublisher } from "../events/publishers/payment-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
+import { verifyToken } from "../functions/verifyPayment";
 const route = express.Router();
 
 route.post(
@@ -46,6 +47,8 @@ route.post(
     if (order.status === OrderStatus.Completed) {
       throw new BadRequestError("Order already paid");
     }
+
+    await verifyToken(token, order);
 
     const payment = Payment.build({
       user: req.currentUser!.id,

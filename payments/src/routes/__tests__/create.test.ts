@@ -64,7 +64,7 @@ it("Order failed - without a valid token", async () => {
   await request(app)
     .post("/api/payments")
     .set("Cookie", global.signin(userOne))
-    .send({ orderId: order.id, token: "12sdaf" })
+    .send({ orderId: order.id })
     .expect(400);
 });
 

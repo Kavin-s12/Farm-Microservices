@@ -5,14 +5,14 @@ on:
     branches:
       - master
     paths:
-      - 'orders/**'
+      - 'frontend/**'
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GKE_CLUSTER: farmmicro    # cluster name
   GKE_ZONE: asia-south1  # cluster zone
   IMAGE: farmmicro # image name
-  IMAGE_TAG: orders # image tag
+  IMAGE_TAG: frontend # image tag
   GAR_ZONE: asia-south1 # artifact registry zone
   GAR_REPO: farm # artifact registry repository
 
@@ -48,7 +48,7 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |-
-        cd orders && docker build \
+        cd frontend && docker build \
           --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
@@ -61,4 +61,4 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        kubectl rollout restart deployment orders-depl
+        kubectl rollout restart deployment frontend-depl

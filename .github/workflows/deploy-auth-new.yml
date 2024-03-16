@@ -26,6 +26,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    # Change directory to auth folder
+    - name: Change directory to auth
+      run: cd auth
+
     # Setup gcloud CLI
     - id: 'auth'
       uses: 'google-github-actions/auth@v0'

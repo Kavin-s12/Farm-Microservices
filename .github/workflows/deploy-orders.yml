@@ -18,7 +18,7 @@ env:
 
 jobs:
   setup-build-publish-deploy:
-    name: Deploy
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: production
 
@@ -45,8 +45,20 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
 
+    # Build the Docker image
+    - name: Build
+      run: |-
+        cd orders && docker build \
+          --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG"
+
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        kubectl apply -f infra/k8s
-        kubectl apply -f infra/k8s-prod 
+        kubectl rollout restart deployment orders-depl

@@ -24,7 +24,6 @@ spec:
                   name: jwt-secret
                   key: JWT_KEY
 ---
-#updated
 apiVersion: v1
 kind: Service
 metadata:

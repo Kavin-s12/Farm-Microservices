@@ -24,7 +24,7 @@ spec:
                   name: jwt-secret
                   key: JWT_KEY
 ---
-#cluster ip
+#testing now
 apiVersion: v1
 kind: Service
 metadata:

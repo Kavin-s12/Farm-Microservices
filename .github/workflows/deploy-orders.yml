@@ -1,4 +1,4 @@
-name: deploy-orders
+name: Build and Deploy to GKE
 
 on:
   push:
@@ -7,14 +7,58 @@ on:
     paths:
       - 'orders/**'
 
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GKE_CLUSTER: farmmicro    # cluster name
+  GKE_ZONE: asia-south1  # cluster zone
+  IMAGE: farmmicro # image name
+  IMAGE_TAG: orders # image tag
+  GAR_ZONE: asia-south1 # artifact registry zone
+  GAR_REPO: farm # artifact registry repository
+
 jobs:
-  builds:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
-      - uses: actions/checkout@v2
-      - run: cd orders && docker build -t kavins12/farmmicro:orders .
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        env:
-          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      - run: docker push kavins12/farmmicro:orders
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Setup gcloud CLI
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - name: Docker configuration
+      run: |-
+        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://$GAR_ZONE-docker.pkg.dev
+
+    # Get the GKE credentials so we can deploy to the cluster
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+
+    # Build the Docker image
+    - name: Build
+      run: |-
+        cd orders && docker build \
+          --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG"
+
+    # Deploy the Docker image to the GKE cluster
+    - name: Deploy
+      run: |-
+        kubectl rollout restart deployment orders-depl

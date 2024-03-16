@@ -23,7 +23,7 @@ const start = async () => {
 
   app.listen(PORT, () => {
     console.log(`Auth server started in port ${PORT}`);
-    console.log("Check for re-deployment");
+    console.log("Hello there");
   });
 };
 

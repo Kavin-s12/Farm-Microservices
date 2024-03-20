@@ -5,14 +5,14 @@ on:
     branches:
       - master
     paths:
-      - 'frontend/**'
+      - 'orders/**'
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GKE_CLUSTER: farmmicro    # cluster name
   GKE_ZONE: asia-south1  # cluster zone
-  IMAGE: farmmicro # image name
-  IMAGE_TAG: frontend # image tag
+  IMAGE: orders # image name
+  IMAGE_TAG: latest # image tag
   GAR_ZONE: asia-south1 # artifact registry zone
   GAR_REPO: farm # artifact registry repository
 
@@ -61,4 +61,4 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        kubectl rollout restart deployment frontend-depl
+        kubectl rollout restart deployment orders-depl

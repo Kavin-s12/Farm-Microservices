@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: farmmicro/farm/frontend
+          image: asia-south1-docker.pkg.dev/farmmicro/farm/frontend
           env:
             - name: RAZORPAY_KEY_ID
               valueFrom:

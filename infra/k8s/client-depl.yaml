@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: farmmicro/farm/client
+          image: asia-south1-docker.pkg.dev/farmmicro/farm/client
 ---
 apiVersion: v1
 kind: Service

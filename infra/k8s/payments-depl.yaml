@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: payments
-          image: farmmicro/farm/payments
+          image: asia-south1-docker.pkg.dev/farmmicro/farm/payments
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: farmmicro/farm/auth
+          image: asia-south1-docker.pkg.dev/farmmicro/farm/auth
           env:
             - name: MONGO_URI
               value: 'mongodb://auth-mongo-srv:27017/auth'

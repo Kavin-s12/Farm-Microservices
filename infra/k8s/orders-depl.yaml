@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: orders
-          image: farmmicro/farm/orders
+          image: asia-south1-docker.pkg.dev/farmmicro/farm/orders
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

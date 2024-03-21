@@ -11,7 +11,7 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GKE_CLUSTER: farmmicro    # cluster name
   GKE_ZONE: asia-south1  # cluster zone
-  IMAGE: frontend # image name
+  IMAGE: farm/frontend # image name
   IMAGE_TAG: latest # image tag
   GAR_ZONE: asia-south1 # artifact registry zone
   GAR_REPO: farm # artifact registry repository

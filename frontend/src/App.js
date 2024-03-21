@@ -21,7 +21,7 @@ const ProfileScreen = lazy(() => import("./screens/ProfileScreen"));
 const RegisterScreen = lazy(() => import("./screens/RegisterScreen"));
 const LoginScreen = lazy(() => import("./screens/LoginScreen"));
 
-// testing
+// testing for deployment
 function App() {
   return (
     <Router>

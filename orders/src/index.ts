@@ -58,7 +58,7 @@ const start = async () => {
 
   app.listen(PORT, () => {
     console.log(`Orders server started in port ${PORT}`);
-    console.log("Hello checking");
+    console.log("Hello deployment");
   });
 };
 

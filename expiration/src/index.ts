@@ -30,6 +30,8 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
+    console.log("Checking");
+
     new OrderCreatedListener(natsWrapper.client).listen();
   } catch (error) {
     console.log(error);

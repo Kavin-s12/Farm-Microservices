@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: products
-          image: farmmicro/products
+          image: farmmicro/farm/products
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

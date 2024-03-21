@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: expiration
-          image: farmmicro/expiration
+          image: farmmicro/farm/expiration
           env:
             - name: NATS_CLIENT_ID
               valueFrom:

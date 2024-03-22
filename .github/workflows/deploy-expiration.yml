@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'exipration/**'
+      - 'expiration/**'
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
